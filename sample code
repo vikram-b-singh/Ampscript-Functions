@@ -1,0 +1,614 @@
+CONTENT FUNCTIONS
+---------------------------
+AttachFile
+This function attaches the specified file to the outbound message or displays a link to the file when included in a landing page. This function returns no output.
+Type of location containing the file to attach. Valid values include:
+ContentBuilder
+FTP
+HTTP
+
+NOTE: Marketing Cloud Support must provision this function for use in your account. There is typically an additional charge per attachment sent. Contact your Salesforce Account Executive to complete the process.
+
+%%[
+
+var @customerKey, @fileAlias
+set @customerKey = "LoyaltyMembersCB"
+set @fileAlias = "LoyaltyMembers_ContentBuilder.zip"
+
+AttachFile("ContentBuilder", @customerKey, @fileAlias)
+
+]%%
+
+Example 1
+This example attaches a Content Builder asset by Customer/External Key:
+
+%%[
+
+var @customerKey, @fileAlias
+set @customerKey = "LoyaltyMembersCB"
+set @fileAlias = "LoyaltyMembers_ContentBuilder.zip"
+
+AttachFile("ContentBuilder", @customerKey, @fileAlias)
+]%%
+
+This example attaches a file from the Marketing Cloud Import folder:
+%%[
+
+var @fileName, @fileAlias
+set @fileName = "LoyaltyMembers.zip"
+set @fileAlias = "LoyaltyMembers_FTP.zip"
+
+AttachFile("FTP", @fileName, @fileAlias)
+
+]%%
+
+This example attaches a file from an external website via HTTP/HTTPS:
+
+%%[
+
+var @fileName, @fileAlias
+set @fileName = "https://limedash.com/drop/LoyaltyMembers.zip"
+set @fileAlias = "LoyaltyMembers.zip"
+AttachFile("HTTP", @fileName, @fileAlias)
+
+]%%
+
+--------------------------------------------
+BarcodeURL
+This function generates a barcode image URL using the specified arguments.
+-------------------------------------
+BuildRowSetFromString
+This function returns a row set by splitting a string by the specified delimiter string.
+-------------------------
+BuildRowSetFromXML
+This function creates a row set from an XML string. It returns an error or an empty row set if no XML matches the specified XPATH.
+--------------------------------------------------
+
+ContentBlockByID
+This function returns the content stored in the specified Content Block and optionally wraps the content in an Impression Region.
+
+%%=ContentBlockByID(1234)=%%
+------------------------------
+
+ContentBlockByKey
+This function returns the content stored in the specified Content Block and optionally wraps the content in an Impression Region.
+
+%%=ContentBlockByKey("2db254de-7b89-4daf-93af-0db2b5a00b83")=%%
+
+------------------------
+ContentBlockByName
+This function returns the content stored in the specified Content Block and optionally wraps the content in an Impression Region.
+
+%%=ContentBlockByName("Content Builder\LoyaltyGreeting")=%%
+
+------------------------------
+ContentImageByID
+This function returns an HTML img tag with the specified Content Builder image. 
+
+ContentImageByKey
+This function returns an HTML img tag with the specified Content Builder image.
+
+------------------------------------
+TransformXML
+This function applies an XSL transformation to the specified XML data.
+----------------------------
+
+TreatAsContent
+This function forces AMPscript and personalization strings to be evaluated in the specified input string.
+
+%%[
+
+var @contentMath
+set @contentMath = "%%=add(1,3)=%%"
+
+]%%
+contentMath (static): %%=v(@contentMath)=%%
+<br>contentMath (evaluated): %%=treatascontent(@contentMath)=%%
+
+Output
+contentMath (static): %%=add(1,3)=%%
+<br>contentMath (evaluated): 4
+
+---------------------------------------------
+================
+DATE & TIME FUNCTIONS 
+
+DateAdd
+This function returns a date with the specified number interval added to the specified part of the date.
+set @plusOneYear = DateAdd(@today, 1, "Y")
+
+DateDiff
+This function returns the difference between two dates based on the specified date part.
+set @diffHours = dateDiff(@startDate, @endDate,"H")
+
+DateParse
+This function converts the string representation of a date and time into its DateTime equivalent.
+set @dateString2 = "02/29/2016 05:42:00"
+set @date2 = DateParse(@dateString2,0)
+
+DatePart
+This function returns the specified part of a date string.
+set @dateString = "Sun, 15 Oct 2017 19:35:00"
+set @year = datePart(@dateString, "Y")
+
+FormatDate
+This function formats a date/time string in the specified format pattern and locale.
+set @monthShortName = FormatDate(@dateString,"MMM")
+set @monthFullName = FormatDate(@dateString,"MMMM")
+
+GetSendTime(1) or GetSendTime()
+This function returns the date and time a send starts or the date and time a send has completed for a specific subscriber. The date and time returned is Central Standard Time (CST) without any adjustments for daylight savings.
+
+A value of true returns the date and time the send started. A value of false returns the date and time the send completed for a subscriber. The default value is false if no value is specified.
+
+Now(1) or Now()
+This function returns the current system date and time or the date and time of the original send. The date and time returned is Central Standard Time (CST) without any adjustments for daylight savings.
+
+A value of true returns the date and time the send started for a subscriber. A value of false returns the current date and time. The default value is false if no value is specified
+
+SystemDateToLocalDate() or LocalDateToSystemDate()
+This function converts the specified system date/time into the local date/time or vice versa.
+==============================================
+
+ENCRYPTION OR ENCODING FUNCTIONS
+
+Base64Decode
+This function decodes a Base64 encoded string.
+
+Base64Encode
+This function Base64 encodes a string.
+
+DecryptSymmetric
+This function decrypts a string with the specified algorithm and qualifiers.
+
+EncryptSymmetric
+This function encrypts a string with the specified algorithm and qualifiers. Outputs a Base64 encoded value.
+
+MD5
+This function converts the specified string into a 16-byte MD5 hash hex value.
+NOTE: The results of the MD5 hash are considered one-way, meaning they cannot be decrypted.
+
+SHA1
+This function converts the specified string into a SHA1 hex value hash.
+NOTE: The results of the SHA1 hash are considered one-way, meaning they cannot be decrypted.
+
+---------------------------------------------
+MATH FUNCTIONS
+
+Add, Subtract, Mod, Multiply, Divide
+
+Random
+This function returns a random number between two numbers. Both upper and lower bound parameters are inclusive.
+
+---------------------------------------------------
+SALES & SERVICE CLOUD FUNCTIONS
+
+CreateSalesforceObject
+This function creates a new record in a Salesforce object. The Salesforce 18-digit object identifier is returned by the function.
+NOTE: This function can only be used to create records in standard or custom Salesforce objects, not other objects such as big objects or external objects.
+
+LongSFID
+Sales and Service Cloud objects use a case-sensitive 15-digit character as a record identifier. Marketing Cloud Subscriber and Contact records require a case-insensitive identifier. This function converts 15-digit identifiers into 18-digit case-insensitive identifiers.
+
+RetrieveSalesforceObjects
+This function retrieves fields from a record in a Sales or Service Cloud standard or custom object. The function returns a row set of fields.
+NOTE: The function may take several seconds to execute, impacting email send performance and may result in a timeout if the request volume is high for example; using a process loop to execute the function multiple times or returning a large number of rows. Unlike other AMPscript functions that return a row set — for example, LookupRows which limits the number of rows to 2000 — there is not the same type of limitation on the number of rows returned by this function.
+
+%%[
+
+var @subscriberRows
+
+set @subscriberRows = RetrieveSalesforceObjects(
+   "Contact",
+   "FirstName,LastName,Email",
+   "Id", "=", _subscriberKey )
+
+if RowCount(@subscriberRows) == 1 then /* there should only be one row */
+  var @subscriberRow, @firstName, @lastName, @email
+  set @subscriberRow = Row(@subscriberRows, 1)
+  set @firstName = Field(@subscriberRow, "FirstName")
+  set @lastName = Field(@subscriberRow, "LastName")
+  set @email = Field(@subscriberRow, "Email")
+endif
+
+]%%
+
+
+UpdateSingleSalesforceObject
+This function updates a record in a Sales or Service Cloud standard or custom object. The function returns 1 if the record is updated successfully or 0if it fails.
+
+var @updateRecord
+  set @firstname = RequestParameter("firstname")
+  set @lastName = RequestParameter("lastname")
+  set @email = RequestParameter("email")
+  set @updateRecord = UpdateSingleSalesforceObject(
+      "Contact", @Id,
+      "FirstName", @firstname,
+      "LastName", @lastName,
+      "Email", @email
+     )
+
+-------------------------------------------------------------
+
+HTTP FUNCTIONS
+
+HTTPGet
+This function retrieves, or ‘gets’ content from a defined publicly accessible URL.
+
+Example 1
+The following example retrieves HTML content from an external URL and displays it in an email, web page or message.
+%%[
+
+var @getRequest
+set @getRequest = TreatAsContent(HTTPGet("https://httpbin.org/html"))
+
+]%%
+%%=v(@getRequest)=%%
+
+
+Your send will fail if you use the HTTPGet() function with the view_email_url personalization string without the proper message context. If you do need to to use this function with the view_email_url personalization string for View as a Web Page functionality, you must specify the _messagecontext option:
+
+%%[IF _messagecontext == "SEND" AND jobid > 0 THEN
+set @HTMLContent = HTTPGet(view_email_url)
+ENDIF]%%
+
+
+Before HTTPGet Command
+Prefixing HTTPGet with a Before; string will retrieve the content once, at the beginning of an email send.
+%%Before;HTTPGet "https://limedash.com/webhook/sending"%%
+
+After HTTPGet Command
+Prefixing HTTPGet with an After; string will send a request to the specified URL. This command will not output any content in the email. This command is useful as a webhook, to indicate that an email has been sent.
+NOTE: This command cannot be used with triggered email sends, as a triggered email send job does not end after an email is sent.
+%%After;HTTPGet "https://limedash.com/webhook/sent"%%
+
+
+------------
+HTTPPost
+This function posts content to a defined, publicly accessible URL.
+
+HTTPPost2
+Similar to the HTTPPost function, this posts content to a defined, publicly accessible URL, but it also provides exception handling if an error is returned from the request.
+
+
+HTTPRequestHeader
+This function returns a specified header from an HTTP request. This function is only available in landing pages, microsites and CloudPages. It cannot be used in other Marketing Cloud applications.
+
+set @referrer = HTTPRequestHeader("Referer")
+set @userAgent = HTTPRequestHeader("User-Agent")
+set @host = HTTPRequestHeader("Host")
+
+
+RedirectTo
+This function is required when using the <a> HTML hyperlink tag in emails when the hypertext reference (href) attribute is either an attribute or a variable and the hyperlink is a tracked email link.
+
+
+Example
+In the following example, an email is sent from a Sendable Data Extension containing a field named ‘store’.
+%%[
+var @link, @store
+set @store = AttributeValue("store")
+set @link = concat("https://limedash.com/offers/", @store)
+]%%
+Sign up <a href="%%=RedirectTo(@link)=%%">here</a> to receive special offers.
+
+Redirect
+This function redirects a landing page to a specified URL.
+NOTE: Any code that appears before the Redirect function will be interpreted, but any code that appears after the function will not.
+  
+Redirect(concat("https://limedash.com?src=", @source))  
+ 
+  
+UrlEncode
+Returns the specified URL with spaces replaced with %20 or fully encodes all non-alphanumeric characters.
+ URLEncode('http://example.com?p=first name')
+  http://example.com?p=first%20name
+  
+WrapLongURL
+Overview 
+returns a wrapped URL for the long URL provided in the string parameter of the function. You can only modify URLs longer than 975 characters, and this function does not replace the standard link wrapping functionality implemented in the Marketing Cloud application. Use this function to mitigate a known limitation with long URLs in Microsoft Outlook 2007 and URLs such as those included in an image source tag.  
+  
+NOTE: This function does not shorten URLs less than 975 characters in length.
+NOTE: URLs will only be shortened when the email is sent.
+%%[
+var @icon
+set @icon = "https://limedash.com/images/rRprc5xG8vP0crpSqWLScVu6yKLTm...lKJK9m1napRdf6b+DAy/ixM.jpg" /* abbreviated for display purposes */
+]%%
+<img src="%%=WrapLongURL(@icon)=%%" width="50" height="50" alt="icon" />
+  
+Output
+The value of the src attribute will be shortened to a URL which redirects to the original URL.
+
+http://cl.exct.net/ResolveURL.aspx?qs=faebf571997acc80ec99646da21ae0ab
+  
+-------------------------
+
+CloudPagesURL
+This function provides a convenient method of linking to landing pages (created in CloudPages) from email messages.
+When an email is sent that includes a link to a landing page with this function, a URL link is generated to the landing page and is appended with an encrypted query string.
+
+Example 1
+An email is sent that includes the following link to a landing page using the CloudPagesURL function:
+<a href="%%=CloudPagesURL(123)=%%">click here to visit your landing page</a>  
+  
+-------------------
+  
+QueryParameter
+This function retrieves a value from a URL query string, based on a defined parameter key.
+  NOTE: You can use this function to retrieve parameter values from encrypted query string URLs created by the CloudPagesURL or MicrositeURL functions.
+ <a href="%%=CloudPagesURL(123,'p',Product)=%%">view your product page</a> 
+<p>Thank you for purchasing %%=QueryParameter('p')=%%.</p>
+  
+RequestParameter
+This function is similar to QueryParameter, but in addition to retrieving a value from a URL query string, it can also be used to retrieve form field values.
+  
+ %%[
+
+if RequestParameter("submitted") == true then
+
+  InsertData(
+        "Registrations",
+        "FirstName", RequestParameter("firstname"),
+        "LastName", RequestParameter("lastname"),
+        "Company", RequestParameter("company"),
+        "Email", RequestParameter("email")
+       )
+
+endif
+
+]%%
+
+<!DOCTYPE html>
+<html>
+   <body>
+      %%[ if RequestParameter("submitted") == true then ]%%
+         <p>Thank you for submitting your details.</p>
+      %%[ else ]%%
+      <h2>Register</h2>
+      <form action="%%=RequestParameter('PAGEURL')=%%" method="post">
+         <label>First name</label>
+         <input type="text" name="firstname">
+         <label>Last name</label>
+         <input type="text" name="lastname">
+         <label>Company</label>
+         <input type="text" name="company">
+         <label>Email</label>
+         <input type="text" name="email">
+         <input name="submitted" type="hidden" value="true" />
+         <input type="submit" value="Submit">
+      </form>
+      %%[ endif ]%%
+   </body>
+</html> 
+  
+  -----------------------
+
+ STRING FUNCTIONS
+
+  Char
+This function returns the ASCII character for the specified ASCII character code.
+  
+ IndexOf
+This function returns the position of the first occurrence of a specified value in a string. The index numbering starts at 1.
+  if indexOf(@fullName, " ") > 0 then
+  set @firstName = Substring(@fullName,1, Subtract(IndexOf(@fullName," "),1))
+endif
+  
+  Length
+This function returns the number of characters in the specified string.
+  
+  Lowercase
+This function converts all uppercase letters in the specified string into lowercase letters.
+  
+  Uppercase
+This function converts all lowercase letters in the specified string to uppercase.
+  
+  ProperCase
+This function capitalizes the first letter in the specified string and any other letters in the string that follow any character other than a letter. It converts all other letters into lowercase.
+  
+  RegExMatch
+This function searches for and returns a string for the first occurrence of the matching regular expression pattern.
+  
+  Replace
+This function replaces the first string value with the second string value in the specified string.
+  set @blurbReplaced = replace(@blurb, "<br>", " ")
+  
+  ReplaceList
+This function replaces the first string value with the second string value and any subsequent values in the specified string.
+  set @colorsNew  = ReplaceList(@colors, "|", "/", ",",.....)
+  colors: red/orange/yellow,green/blue,indigo/violet
+colorsNew: red|orange|yellow|green|blue|indigo|violet
+  
+  StringToDate
+This function parses the specified date string and returns a .NET DateTime object.
+  
+  StringToHex
+This function converts the specified string into its hex equivalent.
+  
+  Substring
+This function returns a portion of the specified string starting at a certain character position and no longer than the specified length. 
+  
+  Trim
+This function removes the leading and trailing spaces from the specified string.
+  
+  -------------------------------------
+  
+  UTILITY FUNCTIONS
+  
+  AttributeValue
+  This function returns the value of an attribute based on the context of the Contact or Subscriber. These values are derived from a field or attribute related to the Contact or Subscriber that the message is sent to. These can include the following data sources:
+
+Email Subscriber Profile Attributes
+Sendable Data Extension Fields
+Journey Builder Entry Source Attributes
+MobileConnect List Attributes
+MobilePush Attributes
+  
+set @firstName = [First Name]
+  
+  Domain
+This function returns the domain of an email address. NOTE: If the argument passed to the function is not a valid email address, the function will return a null output.
+  <p>Your email domain is %%=Domain(emailaddr)=%%.</p>
+  <p>Your email domain is limedash.com.</p>
+  
+  
+  Empty
+This function provides a conditional evaluation of an expression. If the expression evaluates as null or empty, the function will output true, otherwise it will output false.
+  
+  set @memberId = MemberId
+
+if empty(@memberId) then
+  set @displayMemberId = "You are not a member"
+  
+  
+  IsNull
+Similar to the Empty function, this function provides a conditional evaluation of an expression. If the expression evaluates as null, the function will output true, otherwise it will output false.
+  if IsNull(@phone) then
+  
+  
+  Format
+This function formats a string in the specified format pattern and locale.
+  set @long = Format(@dateString,"D", "Date")
+set @short = Format(@dateString,"d", "Date")
+set @fullShortTime = Format(@dateString,"f", "Date")
+set @fullShortTimeFR = ProperCase(Format(@dateString,"f", "Date","fr-FR"))
+  
+  FormatCurrency
+This function formats a string as a currency for the specified locale. NOTE: By default, this function rounds half up to two decimal places.
+  
+  set @num = "123.45678"
+set @locale = "en-US"
+set @currency  = FormatCurrency(@num, @locale)
+
+]%%
+  <br>currency: %%=v(@currency)=%%
+currency: $123.46
+  
+  FormatNumber
+This function formats a string as a number.
+  
+  set @num = "123"
+
+set @Currency = FormatNumber(@num, "C")
+set @Currency3 = FormatNumber(@num, "C3")
+set @Decimal = FormatNumber(@num, "D")
+set @Exponential = FormatNumber(@num, "E")
+set @Fixed = FormatNumber(@num, "F")
+  
+  
+  num: 123
+
+Currency: $123.00
+Currency3: $123.000
+Decimal: 123
+Exponential: 1.230000E+002
+  Fixed: 123.00
+  
+  
+  GUID
+This function returns a 36-character global unique identifier (GUID) string.
+  GUID: %%=GUID()=%%
+  24c97bbd-9f6e-4da7-94e5-d4b0ac7c2229
+  
+  IIf
+This in-line IF function returns the value of the second argument if the value for the first argument evaluates as true.
+  
+  set @greeting = Iif(not Empty(@firstName), @firstName, "Member")
+  
+  IsEmailAddress
+This function confirms whether or not a value matches a valid email syntax. The function returns true if the syntax is valid or false if it’s not.
+  
+  NOTE: The function only provides syntax validation. It does not indicate whether the email address is deliverable. For example, the function will not check whether an MX record exists for the domain or whether the email address is a role-based email.
+  
+  %%=Iif(IsEmailAddress(RequestParameter('email'))==false,'<div class="alert">You have entered an invalid email address</div>','')=%%
+  
+  IsPhoneNumber
+This function confirms whether or not a value is a valid US phone number. The function returns true if the syntax is valid or false if it’s not. Any non-numeric characters are ignored on evaluation.
+  
+  --------
+  Output
+While code within an AMPscript block does not display output where the block appears in an email on a page, the Output function enables variable values to be output at the location where the code block appears.
+
+This function is convenient when debugging AMPscript, as it enables variables or function values to be output in an email, message or page, without the requirement to output the code in an inline AMPscript function.
+  
+  NOTE: This function will only return a result from nested functions. It will not return a result if only a variable is used as an argument. For example Output(@firstName) will not output a value, even if the variable has been set within the code block.
+  
+  Output(Concat("First Name: ", @firstName))
+  
+  
+  OutputLine
+This function is similar to the Output function, but it inserts a line feed character after the result.
+
+This function is convenient when there is a requirement to output multiple functions results from a code block, as each result will be displayed on a separate line, whereas multiple Output functions in a single code block will display each result on the same line.
+  
+  OutputLine(Concat("First Name: ", @firstName))
+OutputLine(Concat("Last Name: ", @lastName))
+OutputLine(Concat("Email: ", @email))
+OutputLine(Concat("Phone: ", @phone))
+  
+  Each OutputLine result will be displayed on a new line.
+
+First Name: Doug
+Last Name: Smith
+Email: doug@limedash.com
+Phone: 234 235 5678
+  
+  
+  RaiseError
+This function enables the suppression or cancellation of an email send. It is useful for exception handling in your code, if an unexpected result occurs.
+  2 Boolean False Indicates whether the function skips the send for current Subscriber and continues or stops. A value of true skips the send for current Subscriber and moves to next Subscriber. A value of false stops the send and returns an error. The default value is false.
+5 Boolean False Indicates whether the function preserves Data Extension rows inserted, updated, or deleted by AMPscript functions before error occurs, even if the process skips the Subscriber. A value of 1 will preserve data operations to Data Extensions before the error is raised, even if the Subscriber is skipped. A value of 0 does not preserve operations before the error.
+  
+NOTE: This function still counts as an email send, even if an email was not sent to a Subscriber. Only use this function for exception handling, not for segmenting or excluding a large number of Subscribers.  
+  
+  NOTE: Because the system pre-processes and builds these emails, tracking and reporting numbers include these emails despite the errors and may cause inaccuracies. Use this function to handle the errors of a small number of subscribers, rather than as a method to segment out large numbers of subscribers. Instead, use query activities and exclusion lists to handle your segmentation needs.
+  
+  RaiseError('An Error Occurred')
+System returns the error message 'An Error Occurred' and stops the job.
+
+RaiseError('Do not send to subscriber', true)
+System returns the error message 'Do not send to subscriber' and stops the send to that subscriber only.
+
+
+  V
+This function outputs the value of a variable. It is commonly used when a variable is defined within a code block and the result is displayed in an email, message or web page.
+  
+  <p>Hello %%=v(@displayName)=%%,</p>
+  
+  
+  GetJWT
+This function allows users to create JSON web tokens (JWTs). 
+  
+  
+  ---------------------------------------------------------
+  
+  EXCLUSION SCRIPTS
+  
+  Exclusion scripts use AMPscript expressions which, if they evaluate to true, suppress the sending of an email to the respective Subscriber. The following requirements apply to exclusion scripts:
+
+AMPscript blocks or inline AMPscript cannot be included
+Scripts cannot span multiple lines
+Variables cannot be set
+The expression must evaluate to true or false
+Exclusion scripts are evaluated in the context of the Subscriber they are sent to, so they can include attributes or personalization strings.
+
+NOTE: You should only use exclusion scripts for exception handling, not for segmenting or excluding a large number of subscribers.
+  
+  The following expression will suppress the sending of an email to a Subscriber if they do not have a points balance.
+Empty(AttributeValue("Points"))
+  
+----------------------------------------
+  
+  HTTPGetWrap Command
+Prefixing an href attribute value in syndicated content with HTTPGetWrap| will track links in an email.
+  
+   <a href="HTTPGetWrap|http://limedash.com/blacksmith">blacksmith</a> to thyself ere his full ruin came upon him.</p>
+NOTE: The httpgetwrap| prefix must be enabled by Marketing Cloud Support. The special business rule is called WRAP_HTTPGET_URLS.
+
+
+
+  
+  
+  
+  
+ 
